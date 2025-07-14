@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Quay lại"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Thêm câu hỏi"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:gravity="center"/>
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Danh mục"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp"/>
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/textbox"
+            android:padding="8dp"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Câu hỏi"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/questionInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập câu hỏi"
+            android:background="@drawable/textbox"
+            android:padding="10dp"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Các lựa chọn"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/option1Input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Lựa chọn 1"
+            android:background="@drawable/textbox"
+            android:padding="10dp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/option2Input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Lựa chọn 2"
+            android:background="@drawable/textbox"
+            android:padding="10dp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/option3Input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Lựa chọn 3"
+            android:background="@drawable/textbox"
+            android:padding="10dp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/option4Input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Lựa chọn 4"
+            android:background="@drawable/textbox"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đáp án đúng"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp"/>
+
+        <Spinner
+            android:id="@+id/answerSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/textbox"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/addQuestionBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thêm câu hỏi"
+            android:background="@drawable/button_1"
+            android:textColor="@android:color/white"
+            android:padding="12dp"/>
+
+    </LinearLayout>
+</ScrollView> 

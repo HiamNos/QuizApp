@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Quiz Me</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Xin chào</string>
+    <string name="update_profile">Cập nhật hồ sơ</string>
+    <string name="login">Đăng nhập</string>
+    <string name="signup">Đăng ký</string>
+    <string name="forgot_password">Quên mật khẩu</string>
+    <string name="admin_management">Quản lý hệ thống</string>
+    <string name="add_category">Thêm danh mục</string>
+    <string name="add_question">Thêm câu hỏi</string>
+    <string name="edit_question">Sửa câu hỏi</string>
+    <string name="delete_question">Xóa câu hỏi</string>
+    <string name="back">Quay lại</string>
+    <string name="logout">Đăng xuất</string>
+</resources>

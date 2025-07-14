@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".SignupActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="250dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/quizmelogo" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="32dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+        <!-- Signup Form Layout -->
+        <LinearLayout
+            android:id="@+id/signupLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="TẠO TÀI KHOẢN MỚI"
+                android:textColor="@color/colorPurple"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="100dp"
+                android:layout_height="5dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background" />
+
+            <EditText
+                android:id="@+id/nameBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/textbox"
+                android:drawableLeft="@drawable/user"
+                android:drawablePadding="15dp"
+                android:drawableTint="@color/colorPurple"
+                android:ems="10"
+                android:hint="Họ và tên"
+                android:inputType="textPersonName"
+                android:padding="15dp" />
+
+            <EditText
+                android:id="@+id/emailBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/textbox"
+                android:drawableLeft="@drawable/email"
+                android:drawablePadding="15dp"
+                android:drawableTint="@color/colorPurple"
+                android:ems="10"
+                android:hint="Địa chỉ Email"
+                android:inputType="textEmailAddress"
+                android:padding="15dp" />
+
+            <EditText
+                android:id="@+id/passwordBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/textbox"
+                android:drawableLeft="@drawable/password"
+                android:drawablePadding="15dp"
+                android:drawableTint="@color/colorPurple"
+                android:ems="10"
+                android:hint="Mật khẩu"
+                android:inputType="textPassword"
+                android:padding="15dp" />
+
+            <Button
+                android:id="@+id/createNewBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_1"
+                android:text="Gửi mã xác nhận"
+                android:textColor="@color/color_white" />
+
+            <Button
+                android:id="@+id/loginBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_2"
+                android:text="Đã có tài khoản?"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="Bằng việc đăng ký, bạn đồng ý với chính sách bảo mật và điều khoản sử dụng của chúng tôi."
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <!-- Verification Code Layout -->
+        <LinearLayout
+            android:id="@+id/verificationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="XÁC NHẬN EMAIL"
+                android:textColor="@color/colorPurple"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="5dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:gravity="center"
+                android:text="Vui lòng kiểm tra email và nhập mã xác nhận 6 số"
+                android:textColor="@color/colorPurple"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/verificationCodeInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/textbox"
+                android:drawableLeft="@drawable/ic_question"
+                android:drawablePadding="15dp"
+                android:drawableTint="@color/colorPurple"
+                android:ems="10"
+                android:hint="Mã xác nhận (6 số)"
+                android:inputType="number"
+                android:maxLength="6"
+                android:padding="15dp" />
+
+            <Button
+                android:id="@+id/verifyCodeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_1"
+                android:text="Xác nhận mã"
+                android:textColor="@color/color_white" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_2"
+                android:text="Quay lại"
+                android:textColor="@color/color_white"
+                android:onClick="showSignupForm" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
