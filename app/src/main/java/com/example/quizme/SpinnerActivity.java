@@ -12,8 +12,11 @@ import com.example.quizme.SpinWheel.LuckyWheelView;
 import com.example.quizme.SpinWheel.model.LuckyItem;
 import com.example.quizme.databinding.ActivitySpinnerBinding;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class SpinnerActivity extends AppCompatActivity {
@@ -90,9 +93,18 @@ public class SpinnerActivity extends AppCompatActivity {
         binding.wheelview.setData(data);
         binding.wheelview.setRound(5);
 
+        // Hiển thị trạng thái spin
+        updateSpinStatus();
+
         binding.spinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Kiểm tra xem hôm nay đã quay chưa
+                if (hasSpunToday()) {
+                    Toast.makeText(SpinnerActivity.this, "Hôm nay bạn đã quay rồi! Hãy quay lại vào ngày mai.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 Random r = new Random();
                 int randomNumber = r.nextInt(8);
 
@@ -152,9 +164,60 @@ public class SpinnerActivity extends AppCompatActivity {
                 editor.putLong("user_coins", newCoins);
                 editor.apply();
                 
+                // Lưu ngày đã quay hôm nay
+                saveSpinDate();
+                
                 Toast.makeText(SpinnerActivity.this, "Đã thêm " + cash + " xu vào tài khoản.", Toast.LENGTH_SHORT).show();
                 finish();
             }
+        }
+    }
+    
+    // Kiểm tra xem hôm nay đã quay chưa
+    private boolean hasSpunToday() {
+        SharedPreferences prefs = getSharedPreferences("QuizApp", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);
+        
+        if (userId == -1) {
+            return false;
+        }
+        
+        String lastSpinDate = prefs.getString("last_spin_date_" + userId, "");
+        String today = getCurrentDate();
+        
+        return today.equals(lastSpinDate);
+    }
+    
+    // Lưu ngày đã quay
+    private void saveSpinDate() {
+        SharedPreferences prefs = getSharedPreferences("QuizApp", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);
+        
+        if (userId != -1) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("last_spin_date_" + userId, getCurrentDate());
+            editor.apply();
+        }
+    }
+    
+    // Lấy ngày hiện tại dưới dạng string
+    private String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+    
+    // Cập nhật hiển thị trạng thái spin
+    private void updateSpinStatus() {
+        if (hasSpunToday()) {
+            binding.spinStatus.setText("Hôm nay bạn đã quay rồi!\nHãy quay lại vào ngày mai");
+            binding.spinStatus.setBackground(getResources().getDrawable(R.drawable.status_unavailable));
+            binding.spinBtn.setAlpha(0.5f);
+            binding.spinBtn.setEnabled(false);
+        } else {
+            binding.spinStatus.setText("Hôm nay bạn có thể quay!");
+            binding.spinStatus.setBackground(getResources().getDrawable(R.drawable.status_available));
+            binding.spinBtn.setAlpha(1.0f);
+            binding.spinBtn.setEnabled(true);
         }
     }
 }

@@ -67,6 +67,7 @@
                 android:drawableTint="@color/colorPurple"
                 android:ems="10"
                 android:hint="Địa chỉ Email"
+                android:text="lkhnguyen3006@gmail.com"
                 android:inputType="textEmailAddress"
                 android:padding="15dp" />
 
@@ -83,6 +84,7 @@
                 android:drawableTint="@color/colorPurple"
                 android:ems="10"
                 android:hint="Mật khẩu"
+                android:text="12345678"
                 android:inputType="textPassword"
                 android:padding="15dp" />
 

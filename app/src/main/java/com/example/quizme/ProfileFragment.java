@@ -1,20 +1,32 @@
 package com.example.quizme;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.quizme.databinding.FragmentProfileBinding;
+import com.bumptech.glide.Glide;
+
+import java.io.File;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment {
     DatabaseHelper databaseHelper;
-    FragmentProfileBinding binding;
+    
+    // Views
+    private CircleImageView profileImage;
+    private EditText nameBox, emailBox, phoneBox;
+    private LinearLayout changeAvatarBtn, changePasswordBtn, updateInfoBtn;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -29,67 +41,89 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(inflater, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         databaseHelper = new DatabaseHelper(getContext());
+        
+        initViews(view);
+        setupClickListeners();
+        loadUserData();
 
+        return view;
+    }
+    
+    private void initViews(View view) {
+        profileImage = view.findViewById(R.id.profileImage);
+        nameBox = view.findViewById(R.id.nameBox);
+        emailBox = view.findViewById(R.id.emailBox);
+        phoneBox = view.findViewById(R.id.phoneBox);
+        changeAvatarBtn = view.findViewById(R.id.changeAvatarBtn);
+        changePasswordBtn = view.findViewById(R.id.changePasswordBtn);
+        updateInfoBtn = view.findViewById(R.id.updateInfoBtn);
+    }
+    
+    private void setupClickListeners() {
+        changeAvatarBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ChangeAvatarActivity.class);
+            startActivity(intent);
+        });
+        
+        changePasswordBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
+            startActivity(intent);
+        });
+        
+        updateInfoBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), UpdateInfoActivity.class);
+            startActivity(intent);
+        });
+    }
+    
+    private void loadUserData() {
         // Lấy thông tin user từ SharedPreferences
         SharedPreferences prefs = getActivity().getSharedPreferences("QuizApp", getActivity().MODE_PRIVATE);
         int userId = prefs.getInt("user_id", -1);
         String userRole = prefs.getString("user_role", "user");
 
-        if ("admin".equals(userRole)) {
-            // Disable các trường chỉnh sửa
-            binding.nameBox.setEnabled(false);
-            binding.emailBox.setEnabled(false);
-            binding.passBox.setEnabled(false);
-            binding.updateBtn.setVisibility(View.GONE); // Ẩn nút cập nhật
-        }
-
         if (userId != -1) {
             User user = databaseHelper.getUserById(userId);
             if (user != null) {
-                binding.nameBox.setHint(user.getName());
-                binding.emailBox.setHint(user.getEmail());
-                binding.passBox.setHint("Nhập mật khẩu mới");
+                nameBox.setText(user.getName());
+                emailBox.setText(user.getEmail());
+                phoneBox.setText(user.getPhone() != null ? user.getPhone() : "");
+                
+                // Load avatar image
+                loadAvatarImage(user.getAvatarImage());
             }
         }
-
-        binding.updateBtn.setOnClickListener(view -> {
-            String name = binding.nameBox.getText().toString().trim();
-            String email = binding.emailBox.getText().toString().trim();
-            String password = binding.passBox.getText().toString().trim();
-
-            if (name.isEmpty() && email.isEmpty() && password.isEmpty()) {
-                Toast.makeText(getActivity(), "Vui lòng nhập thông tin cần cập nhật!", Toast.LENGTH_SHORT).show();
-                return;
+        
+        // Disable editing for display purposes - users should use specific activities to edit
+        nameBox.setEnabled(false);
+        emailBox.setEnabled(false);
+        phoneBox.setEnabled(false);
+    }
+    
+    private void loadAvatarImage(String imagePath) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                Glide.with(this)
+                        .load(imageFile)
+                        .placeholder(R.drawable.avatar)
+                        .error(R.drawable.avatar)
+                        .into(profileImage);
+            } else {
+                profileImage.setImageResource(R.drawable.avatar);
             }
-
-            if (userId != -1) {
-                User user = databaseHelper.getUserById(userId);
-                if (user != null) {
-                    if (!name.isEmpty()) user.setName(name);
-                    if (!email.isEmpty()) user.setEmail(email);
-                    if (!password.isEmpty()) user.setPassword(password);
-
-                    databaseHelper.updateUser(user);
-
-                    // Cập nhật SharedPreferences
-                    SharedPreferences.Editor editor = prefs.edit();
-                    if (!name.isEmpty()) editor.putString("user_name", name);
-                    if (!email.isEmpty()) editor.putString("user_email", email);
-                    editor.apply();
-
-                    Toast.makeText(getActivity(), "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                    
-                    // Xóa text trong các input
-                    binding.nameBox.setText("");
-                    binding.emailBox.setText("");
-                    binding.passBox.setText("");
-                }
-            }
-        });
-
-        return binding.getRoot();
+        } else {
+            profileImage.setImageResource(R.drawable.avatar);
+        }
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Reload user data when returning to this fragment
+        loadUserData();
     }
 }

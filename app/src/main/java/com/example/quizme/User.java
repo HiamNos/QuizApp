@@ -2,7 +2,7 @@ package com.example.quizme;
 
 public class User {
     private int userId;
-    private String name, email, password, profile, referCode, role;
+    private String name, email, password, profile, referCode, role, phone, avatarImage;
     private long coins = 25;
 
     public User() {
@@ -86,6 +86,22 @@ public class User {
 
     public void setProfile(String profile) {
         this.profile = profile;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAvatarImage() {
+        return avatarImage;
+    }
+
+    public void setAvatarImage(String avatarImage) {
+        this.avatarImage = avatarImage;
     }
 
     // Phương thức kiểm tra xem user có phải admin không

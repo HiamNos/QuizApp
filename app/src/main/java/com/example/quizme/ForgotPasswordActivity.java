@@ -104,18 +104,30 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         binding.emailLayout.setVisibility(View.VISIBLE);
         binding.codeLayout.setVisibility(View.GONE);
         binding.passwordLayout.setVisibility(View.GONE);
+        binding.titleText.setText("Quên mật khẩu");
+        
+        // Add animation
+        binding.emailLayout.startAnimation(android.view.animation.AnimationUtils.loadAnimation(this, R.anim.slide_in_right));
     }
 
     private void showCodeInput() {
         binding.emailLayout.setVisibility(View.GONE);
         binding.codeLayout.setVisibility(View.VISIBLE);
         binding.passwordLayout.setVisibility(View.GONE);
+        binding.titleText.setText("Xác nhận mã");
+        
+        // Add animation
+        binding.codeLayout.startAnimation(android.view.animation.AnimationUtils.loadAnimation(this, R.anim.slide_in_right));
     }
 
     private void showPasswordInput() {
         binding.emailLayout.setVisibility(View.GONE);
         binding.codeLayout.setVisibility(View.GONE);
         binding.passwordLayout.setVisibility(View.VISIBLE);
+        binding.titleText.setText("Đặt mật khẩu mới");
+        
+        // Add animation
+        binding.passwordLayout.startAnimation(android.view.animation.AnimationUtils.loadAnimation(this, R.anim.slide_in_right));
     }
 
     private void sendResetCode(String email) {

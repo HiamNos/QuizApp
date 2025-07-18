@@ -11,10 +11,11 @@
         android:id="@+id/imageView8"
         android:layout_width="380dp"
         android:layout_height="380dp"
-        android:layout_marginBottom="90dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/imageView14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinStatus"
+        app:layout_constraintVertical_bias="0.5"
         app:srcCompat="@drawable/spin_stand" />
 
     <ImageView
@@ -31,6 +32,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/spinitwinit" />
+
+    <TextView
+        android:id="@+id/spinStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/status_available"
+        android:padding="12dp"
+        android:text="Hôm nay bạn có thể quay!"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView12" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -51,7 +68,7 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView8"
         app:layout_constraintStart_toStartOf="@+id/imageView8"
         app:layout_constraintTop_toTopOf="@+id/imageView8"
-        app:layout_constraintVertical_bias="0.13999999"></com.example.quizme.SpinWheel.LuckyWheelView>
+        app:layout_constraintVertical_bias="0.15"></com.example.quizme.SpinWheel.LuckyWheelView>
 
     <ImageView
         android:id="@+id/imageView10"

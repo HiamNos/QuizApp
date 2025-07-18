@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "QuizAppDB";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
 
     // Bảng Users
     public static final String TABLE_USERS = "users";
@@ -24,6 +24,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_COINS = "coins";
     public static final String COLUMN_REFER_CODE = "refer_code";
     public static final String COLUMN_PROFILE = "profile";
+    public static final String COLUMN_PHONE = "phone";
+    public static final String COLUMN_AVATAR_IMAGE = "avatar_image";
 
     // Bảng Categories
     public static final String TABLE_CATEGORIES = "categories";
@@ -58,7 +60,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ROLE + " TEXT DEFAULT 'user', " +
             COLUMN_COINS + " INTEGER DEFAULT 25, " +
             COLUMN_REFER_CODE + " TEXT, " +
-            COLUMN_PROFILE + " TEXT)";
+            COLUMN_PROFILE + " TEXT, " +
+            COLUMN_PHONE + " TEXT, " +
+            COLUMN_AVATAR_IMAGE + " TEXT)";
 
     // Tạo bảng Categories
     private static final String CREATE_TABLE_CATEGORIES = "CREATE TABLE " + TABLE_CATEGORIES + " (" +
@@ -281,7 +285,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public User authenticateUser(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_USER_ID, COLUMN_NAME, COLUMN_EMAIL, COLUMN_PASSWORD, 
-                           COLUMN_ROLE, COLUMN_COINS, COLUMN_REFER_CODE, COLUMN_PROFILE};
+                           COLUMN_ROLE, COLUMN_COINS, COLUMN_REFER_CODE, COLUMN_PROFILE, COLUMN_PHONE, COLUMN_AVATAR_IMAGE};
         String selection = COLUMN_EMAIL + " = ? AND " + COLUMN_PASSWORD + " = ?";
         String[] selectionArgs = {email, password};
         
@@ -297,6 +301,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             user.setCoins(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_COINS)));
             user.setReferCode(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REFER_CODE)));
             user.setProfile(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROFILE)));
+            user.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHONE)));
+            user.setAvatarImage(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AVATAR_IMAGE)));
             cursor.close();
             return user;
         }
@@ -315,6 +321,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_COINS, user.getCoins());
         values.put(COLUMN_REFER_CODE, user.getReferCode());
         values.put(COLUMN_PROFILE, user.getProfile());
+        values.put(COLUMN_PHONE, user.getPhone());
+        values.put(COLUMN_AVATAR_IMAGE, user.getAvatarImage());
         return db.insert(TABLE_USERS, null, values);
     }
 
@@ -389,7 +397,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public User getUserById(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_USER_ID, COLUMN_NAME, COLUMN_EMAIL, COLUMN_PASSWORD, 
-                           COLUMN_ROLE, COLUMN_COINS, COLUMN_REFER_CODE, COLUMN_PROFILE};
+                           COLUMN_ROLE, COLUMN_COINS, COLUMN_REFER_CODE, COLUMN_PROFILE, COLUMN_PHONE, COLUMN_AVATAR_IMAGE};
         String selection = COLUMN_USER_ID + " = ?";
         String[] selectionArgs = {String.valueOf(userId)};
         
@@ -405,6 +413,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             user.setCoins(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_COINS)));
             user.setReferCode(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REFER_CODE)));
             user.setProfile(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROFILE)));
+            user.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHONE)));
+            user.setAvatarImage(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AVATAR_IMAGE)));
             cursor.close();
             return user;
         }
@@ -417,7 +427,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<User> users = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_USER_ID, COLUMN_NAME, COLUMN_EMAIL, COLUMN_PASSWORD, 
-                           COLUMN_ROLE, COLUMN_COINS, COLUMN_REFER_CODE, COLUMN_PROFILE};
+                           COLUMN_ROLE, COLUMN_COINS, COLUMN_REFER_CODE, COLUMN_PROFILE, COLUMN_PHONE, COLUMN_AVATAR_IMAGE};
         String orderBy = COLUMN_COINS + " DESC";
         
         Cursor cursor = db.query(TABLE_USERS, columns, null, null, null, null, orderBy);
@@ -432,6 +442,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             user.setCoins(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_COINS)));
             user.setReferCode(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REFER_CODE)));
             user.setProfile(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROFILE)));
+            user.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHONE)));
+            user.setAvatarImage(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AVATAR_IMAGE)));
             users.add(user);
         }
         cursor.close();
@@ -459,6 +471,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_COINS, user.getCoins());
         values.put(COLUMN_REFER_CODE, user.getReferCode());
         values.put(COLUMN_PROFILE, user.getProfile());
+        values.put(COLUMN_PHONE, user.getPhone());
+        values.put(COLUMN_AVATAR_IMAGE, user.getAvatarImage());
         
         String whereClause = COLUMN_USER_ID + " = ?";
         String[] whereArgs = {String.valueOf(user.getUserId())};
@@ -482,7 +496,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public User getUserByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_USER_ID, COLUMN_NAME, COLUMN_EMAIL, COLUMN_PASSWORD, 
-                           COLUMN_ROLE, COLUMN_COINS, COLUMN_REFER_CODE, COLUMN_PROFILE};
+                           COLUMN_ROLE, COLUMN_COINS, COLUMN_REFER_CODE, COLUMN_PROFILE, COLUMN_PHONE, COLUMN_AVATAR_IMAGE};
         String selection = COLUMN_EMAIL + " = ?";
         String[] selectionArgs = {email};
         
@@ -498,6 +512,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             user.setCoins(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_COINS)));
             user.setReferCode(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REFER_CODE)));
             user.setProfile(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROFILE)));
+            user.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHONE)));
+            user.setAvatarImage(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AVATAR_IMAGE)));
             cursor.close();
             return user;
         }
@@ -667,4 +683,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
-} 
+
+    // Phương thức cập nhật mật khẩu user
+    public boolean updateUserPassword(int userId, String currentPassword, String newPassword) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        
+        // Kiểm tra mật khẩu hiện tại
+        String[] columns = {COLUMN_PASSWORD};
+        String selection = COLUMN_USER_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(userId)};
+        
+        Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
+        
+        if (cursor.moveToFirst()) {
+            String storedPassword = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD));
+            cursor.close();
+            
+            if (storedPassword.equals(currentPassword)) {
+                // Cập nhật mật khẩu mới
+                SQLiteDatabase writeDb = this.getWritableDatabase();
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_PASSWORD, newPassword);
+                
+                String whereClause = COLUMN_USER_ID + " = ?";
+                String[] whereArgs = {String.valueOf(userId)};
+                int result = writeDb.update(TABLE_USERS, values, whereClause, whereArgs);
+                return result > 0;
+            }
+        } else {
+            cursor.close();
+        }
+        return false;
+    }
+
+    // Phương thức cập nhật avatar user
+    public boolean updateUserAvatar(int userId, String avatarImagePath) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_AVATAR_IMAGE, avatarImagePath);
+        
+        String whereClause = COLUMN_USER_ID + " = ?";
+        String[] whereArgs = {String.valueOf(userId)};
+        int result = db.update(TABLE_USERS, values, whereClause, whereArgs);
+        return result > 0;
+    }
+}
