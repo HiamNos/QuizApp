@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/white"
-    android:padding="16dp">
+    android:background="#F5F5F5">
 
-    <!-- Header -->
+    <!-- App Bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:background="@color/colorPrimary"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:minHeight="?attr/actionBarSize">
 
         <ImageButton
             android:id="@+id/backBtn"
@@ -20,129 +23,275 @@
             android:layout_height="40dp"
             android:src="@drawable/ic_back"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Quay lại"/>
+            android:contentDescription="Quay lại" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Quản lý Admin"
+            android:text="Admin Panel"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:gravity="center"/>
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_marginStart="8dp" />
 
         <View
             android:layout_width="40dp"
-            android:layout_height="40dp"/>
+            android:layout_height="40dp" />
+
     </LinearLayout>
 
-    <!-- Quản lý danh mục -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quản lý danh mục"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"/>
-
-    <Spinner
-        android:id="@+id/categorySpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/textbox"
-        android:padding="8dp"
-        android:layout_marginBottom="8dp"/>
-
-    <Button
-        android:id="@+id/addCategoryBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Thêm danh mục mới"
-        android:background="@drawable/button_1"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="12dp"/>
-
-    <!-- Quản lý câu hỏi -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quản lý câu hỏi"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"/>
-
-    <Button
-        android:id="@+id/addQuestionBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Thêm câu hỏi mới"
-        android:background="@drawable/button_1"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="8dp"/>
-
-    <TextView
-        android:id="@+id/questionListLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Danh sách câu hỏi:"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="4dp"/>
-
-    <!-- Question List Container -->
-    <FrameLayout
+    <!-- Main Content -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@drawable/textbox"
-        android:padding="8dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <ListView
-            android:id="@+id/questionList"
+        <!-- Scrollable Top Section -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="4dp"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="false"/>
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
+            android:fillViewport="false">
 
-        <!-- Floating Action Buttons -->
-        <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Welcome Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="6dp"
+                    app:cardBackgroundColor="@color/colorPrimary">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎯 Chào mừng Admin!"
+                            android:textColor="@android:color/white"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Quản lý hệ thống quiz của bạn"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:alpha="0.9" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Category Management Section -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📁 Quản lý danh mục"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black"
+                            android:layout_marginBottom="12dp" />
+
+                        <Spinner
+                            android:id="@+id/categorySpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:background="@drawable/textbox"
+                            android:padding="8dp" />
+
+                        <Button
+                            android:id="@+id/addCategoryBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="➕ Thêm danh mục mới"
+                            android:textSize="16sp"
+                            android:background="@drawable/button_1"
+                            android:textColor="@android:color/white" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Question Management Section -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="❓ Quản lý câu hỏi"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black"
+                            android:layout_marginBottom="12dp" />
+
+                        <Button
+                            android:id="@+id/addQuestionBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:text="➕ Thêm câu hỏi mới"
+                            android:textSize="16sp"
+                            android:background="@drawable/button_1"
+                            android:textColor="@android:color/white" />
+
+                        <TextView
+                            android:id="@+id/questionListLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📋 Danh sách câu hỏi"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- Question List Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/questionList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="4dp"
+                    android:scrollbars="vertical"
+                    android:fadeScrollbars="false"
+                    android:clipToPadding="false"
+                    android:padding="12dp"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:smoothScrollbar="true"
+                    android:fastScrollEnabled="true"
+                    android:nestedScrollingEnabled="false" />
+
+                <!-- Empty State -->
+                <LinearLayout
+                    android:id="@+id/emptyStateContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/trophy"
+                        android:alpha="0.3"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chưa có câu hỏi nào"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/darker_gray"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chọn danh mục và thêm câu hỏi đầu tiên"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/darker_gray"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <!-- Floating Action Buttons -->
+    <LinearLayout
+        android:id="@+id/actionButtonsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/editQuestionBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:visibility="gone"
-            android:id="@+id/actionButtonsContainer">
+            android:layout_marginBottom="12dp"
+            android:text="✏️"
+            android:background="@drawable/floating_button_edit"
+            android:textColor="@android:color/white"
+            android:minWidth="48dp"
+            android:minHeight="48dp" />
 
-            <Button
-                android:id="@+id/editQuestionBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="✏️"
-                android:background="@drawable/floating_button_edit"
-                android:textColor="@android:color/white"
-                android:layout_marginBottom="8dp"
-                android:minWidth="48dp"
-                android:minHeight="48dp"/>
+        <Button
+            android:id="@+id/deleteQuestionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🗑️"
+            android:background="@drawable/floating_button_delete"
+            android:textColor="@android:color/white"
+            android:minWidth="48dp"
+            android:minHeight="48dp" />
 
-            <Button
-                android:id="@+id/deleteQuestionBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🗑️"
-                android:background="@drawable/floating_button_delete"
-                android:textColor="@android:color/white"
-                android:minWidth="48dp"
-                android:minHeight="48dp"/>
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout> 

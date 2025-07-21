@@ -24,6 +24,8 @@ public class QuizActivity extends AppCompatActivity {
     CountDownTimer timer;
     DatabaseHelper databaseHelper;
     int correctAnswers = 0;
+    int categoryId;
+    long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +36,20 @@ public class QuizActivity extends AppCompatActivity {
         questions = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
 
-        final int catId = getIntent().getIntExtra("catId", -1);
-        System.out.println("QuizActivity: Received catId = " + catId);
+        categoryId = getIntent().getIntExtra("catId", -1);
+        startTime = System.currentTimeMillis();
+        System.out.println("QuizActivity: Received catId = " + categoryId);
 
-        if (catId == -1) {
+        if (categoryId == -1) {
             Toast.makeText(this, "Lỗi: Không tìm thấy danh mục!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         try {
-            // Lấy questions từ SQLite
-            List<Question> questionList = databaseHelper.getQuestionsByCategory(catId, 5);
-            System.out.println("QuizActivity: Loaded " + questionList.size() + " questions for category " + catId);
+            // Lấy questions từ SQLite - lấy 10 câu random từ 15 câu
+            List<Question> questionList = databaseHelper.getQuestionsByCategory(categoryId, 10);
+            System.out.println("QuizActivity: Loaded " + questionList.size() + " questions for category " + categoryId);
             
             questions.clear();
             questions.addAll(questionList);
@@ -82,9 +85,12 @@ public class QuizActivity extends AppCompatActivity {
                     setNextQuestion();
                 } else {
                     // Kết thúc quiz
+                    long completionTime = (System.currentTimeMillis() - startTime) / 1000; // Tính theo giây
                     Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
                     intent.putExtra("correct", correctAnswers);
                     intent.putExtra("total", questions.size());
+                    intent.putExtra("categoryId", categoryId);
+                    intent.putExtra("completionTime", completionTime);
                     startActivity(intent);
                     finish();
                 }
@@ -168,15 +174,21 @@ public class QuizActivity extends AppCompatActivity {
                 setNextQuestion();
             }
             if (index == questions.size()) {
+                long completionTime = (System.currentTimeMillis() - startTime) / 1000; // Tính theo giây
                 Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
                 intent.putExtra("correct", correctAnswers);
                 intent.putExtra("total", questions.size());
+                intent.putExtra("categoryId", categoryId);
+                intent.putExtra("completionTime", completionTime);
                 startActivity(intent);
             }
         } else if (viewId == R.id.quizBtn) {
+            long completionTime = (System.currentTimeMillis() - startTime) / 1000; // Tính theo giây
             Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
             intent.putExtra("correct", correctAnswers);
             intent.putExtra("total", questions.size());
+            intent.putExtra("categoryId", categoryId);
+            intent.putExtra("completionTime", completionTime);
             startActivity(intent);
         }
     }

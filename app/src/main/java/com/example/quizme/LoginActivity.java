@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     DatabaseHelper databaseHelper;
     ProgressDialog dialog;
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,27 @@ public class LoginActivity extends AppCompatActivity {
         // }
 
         SharedPreferences prefs = getSharedPreferences("QuizApp", MODE_PRIVATE);
+
+        // Setup password visibility toggle
+        ImageView togglePasswordVisibility = findViewById(R.id.togglePasswordVisibility);
+        togglePasswordVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPasswordVisible) {
+                    // Hide password
+                    binding.passwordBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    togglePasswordVisibility.setImageResource(R.drawable.ic_visibility_off);
+                    isPasswordVisible = false;
+                } else {
+                    // Show password
+                    binding.passwordBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    togglePasswordVisibility.setImageResource(R.drawable.ic_visibility);
+                    isPasswordVisible = true;
+                }
+                // Move cursor to end
+                binding.passwordBox.setSelection(binding.passwordBox.getText().length());
+            }
+        });
 
         binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override

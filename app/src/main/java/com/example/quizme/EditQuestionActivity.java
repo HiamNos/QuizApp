@@ -1,5 +1,6 @@
 package com.example.quizme;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -42,6 +43,11 @@ public class EditQuestionActivity extends AppCompatActivity {
     private void setupUI() {
         binding.updateQuestionBtn.setOnClickListener(v -> updateQuestion());
         binding.backBtn.setOnClickListener(v -> finish());
+        binding.cancelBtn.setOnClickListener(v -> finish());
+        binding.deleteQuestionBtn.setOnClickListener(v -> showDeleteConfirmDialog());
+        
+        // Setup answer spinner
+        setupAnswerSpinner();
     }
 
     private void loadCategories() {
@@ -98,16 +104,30 @@ public class EditQuestionActivity extends AppCompatActivity {
     }
 
     private void setupAnswerSpinner() {
-        List<String> options = new ArrayList<>();
-        options.add(currentQuestion.getOption1());
-        options.add(currentQuestion.getOption2());
-        options.add(currentQuestion.getOption3());
-        options.add(currentQuestion.getOption4());
+        String[] answerOptions = {"A - Lựa chọn 1", "B - Lựa chọn 2", "C - Lựa chọn 3", "D - Lựa chọn 4"};
+        ArrayAdapter<String> answerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, answerOptions);
+        answerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.answerSpinner.setAdapter(answerAdapter);
+    }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, 
-            android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.answerSpinner.setAdapter(adapter);
+    private void showDeleteConfirmDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("⚠️ Xác nhận xóa")
+                .setMessage("Bạn có chắc chắn muốn xóa câu hỏi này không?\n\nHành động này không thể hoàn tác!")
+                .setPositiveButton("🗑️ Xóa", (dialog, which) -> deleteQuestion())
+                .setNegativeButton("❌ Hủy", null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private void deleteQuestion() {
+        boolean result = databaseHelper.deleteQuestion(currentQuestion.getQuestionId());
+        if (result) {
+            Toast.makeText(this, "✅ Đã xóa câu hỏi thành công!", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(this, "❌ Xóa câu hỏi thất bại!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateQuestion() {
@@ -119,19 +139,19 @@ public class EditQuestionActivity extends AppCompatActivity {
 
         if (questionText.isEmpty() || option1.isEmpty() || option2.isEmpty() || 
             option3.isEmpty() || option4.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "⚠️ Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         int selectedPosition = binding.categorySpinner.getSelectedItemPosition();
         if (selectedPosition < 0 || selectedPosition >= categories.size()) {
-            Toast.makeText(this, "Vui lòng chọn danh mục!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "⚠️ Vui lòng chọn danh mục!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         int answerPosition = binding.answerSpinner.getSelectedItemPosition();
         if (answerPosition < 0 || answerPosition >= 4) {
-            Toast.makeText(this, "Vui lòng chọn đáp án đúng!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "⚠️ Vui lòng chọn đáp án đúng!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -167,10 +187,10 @@ public class EditQuestionActivity extends AppCompatActivity {
 
         boolean result = databaseHelper.updateQuestion(currentQuestion);
         if (result) {
-            Toast.makeText(this, "Cập nhật câu hỏi thành công!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "✅ Cập nhật câu hỏi thành công!", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(this, "Cập nhật câu hỏi thất bại!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "❌ Cập nhật câu hỏi thất bại!", Toast.LENGTH_SHORT).show();
         }
     }
 } 

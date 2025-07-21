@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,8 @@ public class SignupActivity extends AppCompatActivity {
     ProgressDialog dialog;
     private Map<String, String> verificationCodes = new HashMap<>();
     private String currentEmail = "";
+    private boolean isPasswordVisible = false;
+    private boolean isConfirmPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +41,22 @@ public class SignupActivity extends AppCompatActivity {
         // Hiển thị màn hình đăng ký
         showSignupForm();
 
+        // Setup password visibility toggles
+        setupPasswordVisibilityToggles();
+
         binding.createNewBtn.setOnClickListener(v -> {
             String email = binding.emailBox.getText().toString().trim();
             String password = binding.passwordBox.getText().toString().trim();
+            String confirmPassword = binding.confirmPasswordBox.getText().toString().trim();
             String name = binding.nameBox.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || name.isEmpty()) {
                 Toast.makeText(SignupActivity.this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!password.equals(confirmPassword)) {
+                Toast.makeText(SignupActivity.this, "Mật khẩu xác nhận không khớp!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -175,5 +188,49 @@ public class SignupActivity extends AppCompatActivity {
             dialog.dismiss();
             Toast.makeText(SignupActivity.this, "Đăng ký thất bại!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setupPasswordVisibilityToggles() {
+        // Setup password visibility toggle
+        ImageView togglePasswordVisibility = findViewById(R.id.togglePasswordVisibility);
+        togglePasswordVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPasswordVisible) {
+                    // Hide password
+                    binding.passwordBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    togglePasswordVisibility.setImageResource(R.drawable.ic_visibility_off);
+                    isPasswordVisible = false;
+                } else {
+                    // Show password
+                    binding.passwordBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    togglePasswordVisibility.setImageResource(R.drawable.ic_visibility);
+                    isPasswordVisible = true;
+                }
+                // Move cursor to end
+                binding.passwordBox.setSelection(binding.passwordBox.getText().length());
+            }
+        });
+
+        // Setup confirm password visibility toggle
+        ImageView toggleConfirmPasswordVisibility = findViewById(R.id.toggleConfirmPasswordVisibility);
+        toggleConfirmPasswordVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isConfirmPasswordVisible) {
+                    // Hide password
+                    binding.confirmPasswordBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    toggleConfirmPasswordVisibility.setImageResource(R.drawable.ic_visibility_off);
+                    isConfirmPasswordVisible = false;
+                } else {
+                    // Show password
+                    binding.confirmPasswordBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    toggleConfirmPasswordVisibility.setImageResource(R.drawable.ic_visibility);
+                    isConfirmPasswordVisible = true;
+                }
+                // Move cursor to end
+                binding.confirmPasswordBox.setSelection(binding.confirmPasswordBox.getText().length());
+            }
+        });
     }
 }

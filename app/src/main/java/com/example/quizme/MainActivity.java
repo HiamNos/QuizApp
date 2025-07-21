@@ -71,22 +71,33 @@ public class MainActivity extends AppCompatActivity {
             setContentView(userBinding.getRoot());
             setSupportActionBar(userBinding.toolbar);
             userBinding.bottomBar.setOnItemSelectedListener(index -> {
-                FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
                 switch (index) {
                     case 0:
+                        FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
                         transaction1.replace(R.id.content, new HomeFragment());
+                        transaction1.commit();
                         break;
                     case 1:
-                        transaction1.replace(R.id.content, new LeaderboardsFragment());
+                        FragmentTransaction friendsTransaction = getSupportFragmentManager().beginTransaction();
+                        friendsTransaction.replace(R.id.content, new FriendsFragment());
+                        friendsTransaction.commit();
                         break;
                     case 2:
-                        transaction1.replace(R.id.content, new WalletFragment());
+                        FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
+                        transaction2.replace(R.id.content, new LeaderboardsFragment());
+                        transaction2.commit();
                         break;
                     case 3:
-                        transaction1.replace(R.id.content, new ProfileFragment());
+                        FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
+                        transaction3.replace(R.id.content, new HistoryFragment());
+                        transaction3.commit();
+                        break;
+                    case 4:
+                        FragmentTransaction transaction4 = getSupportFragmentManager().beginTransaction();
+                        transaction4.replace(R.id.content, new ProfileFragment());
+                        transaction4.commit();
                         break;
                 }
-                transaction1.commit();
                 return false;
             });
         }
@@ -109,7 +120,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.logout) {
+        if (item.getItemId() == R.id.chat_list) {
+            // Mở danh sách tin nhắn
+            Intent intent = new Intent(this, ChatListActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.logout) {
             // Đăng xuất - xóa thông tin user khỏi SharedPreferences
             SharedPreferences prefs = getSharedPreferences("QuizApp", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();

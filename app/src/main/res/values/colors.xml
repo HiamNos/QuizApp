@@ -15,6 +15,9 @@
     <color name="white">#FFFFFF</color>
 
     <color name="light_grey">#E8E8E8</color>
+    <color name="red">#F44336</color>
+    <color name="black">#000000</color>
+    <color name="grey">#757575</color>
 
     <!-- New colors for improved UI -->
     <color name="gold">#FFD700</color>
@@ -23,5 +26,14 @@
     <color name="light_purple">#E8EAF6</color>
     <color name="dark_grey">#424242</color>
     <color name="transparent_white">#80FFFFFF</color>
+
+    <!-- Friend System Colors -->
+    <color name="primary_color">@color/colorPrimary</color>
+    <color name="background_color">#F5F5F5</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="success_color">#4CAF50</color>
+    <color name="error_color">#F44336</color>
+    <color name="warning_color">#FF9800</color>
 
 </resources>

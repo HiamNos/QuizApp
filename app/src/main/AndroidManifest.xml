@@ -30,6 +30,11 @@
         <activity android:name=".ChangeAvatarActivity" />
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".UpdateInfoActivity" />
+        <activity android:name=".SearchFriendsActivity" />
+        <activity android:name=".FriendRequestsActivity" />
+        <activity android:name=".FriendsListActivity" />
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".ChatListActivity" />
         <activity android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>

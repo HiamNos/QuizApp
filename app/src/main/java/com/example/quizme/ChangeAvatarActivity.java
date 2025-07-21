@@ -36,11 +36,13 @@ public class ChangeAvatarActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 102;
 
     private CircleImageView currentAvatar;
+    private CircleImageView avatarOption1, avatarOption2, avatarOption3, avatarOption4, avatarOption5, avatarOption6;
     private Button selectFromGalleryBtn, takePhotoBtn, saveAvatarBtn;
     private ImageView backButton;
     private TextView toolbarTitle;
     private Uri selectedImageUri;
     private String savedImagePath;
+    private String selectedDrawableAvatar; // Để lưu drawable resource name
     private DatabaseHelper databaseHelper;
     private SharedPreferences sharedPreferences;
 
@@ -66,6 +68,14 @@ public class ChangeAvatarActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         toolbarTitle = findViewById(R.id.toolbarTitle);
         
+        // Avatar options
+        avatarOption1 = findViewById(R.id.avatarOption1);
+        avatarOption2 = findViewById(R.id.avatarOption2);
+        avatarOption3 = findViewById(R.id.avatarOption3);
+        avatarOption4 = findViewById(R.id.avatarOption4);
+        avatarOption5 = findViewById(R.id.avatarOption5);
+        avatarOption6 = findViewById(R.id.avatarOption6);
+        
         // Set toolbar title
         toolbarTitle.setText("Đổi ảnh đại diện");
     }
@@ -84,6 +94,37 @@ public class ChangeAvatarActivity extends AppCompatActivity {
         });
 
         saveAvatarBtn.setOnClickListener(v -> saveAvatar());
+        
+        // Avatar options click listeners
+        avatarOption1.setOnClickListener(v -> selectDrawableAvatar("avatar_male_1"));
+        avatarOption2.setOnClickListener(v -> selectDrawableAvatar("avatar_female_1"));
+        avatarOption3.setOnClickListener(v -> selectDrawableAvatar("avatar_male_2"));
+        avatarOption4.setOnClickListener(v -> selectDrawableAvatar("avatar_female_2"));
+        avatarOption5.setOnClickListener(v -> selectDrawableAvatar("avatar_male_3"));
+        avatarOption6.setOnClickListener(v -> selectDrawableAvatar("avatar"));
+    }
+    
+    private void selectDrawableAvatar(String drawableName) {
+        // Clear previous selections
+        selectedImageUri = null;
+        savedImagePath = null;
+        selectedDrawableAvatar = drawableName;
+        
+        // Load selected avatar to current avatar view
+        try {
+            int resourceId = getResources().getIdentifier(drawableName, "drawable", getPackageName());
+            if (resourceId != 0) {
+                Glide.with(this)
+                        .load(resourceId)
+                        .into(currentAvatar);
+                        
+                // Show save button
+                saveAvatarBtn.setVisibility(View.VISIBLE);
+                Toast.makeText(this, "Avatar đã được chọn", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Lỗi khi chọn avatar", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadCurrentAvatar() {
@@ -93,18 +134,46 @@ public class ChangeAvatarActivity extends AppCompatActivity {
             if (userId != -1) {
                 User user = databaseHelper.getUserById(userId);
                 if (user != null && user.getAvatarImage() != null && !user.getAvatarImage().isEmpty()) {
-                    File imageFile = new File(user.getAvatarImage());
-                    if (imageFile.exists()) {
-                        Glide.with(this)
-                                .load(imageFile)
-                                .placeholder(R.drawable.avatar)
-                                .error(R.drawable.avatar)
-                                .into(currentAvatar);
+                    String imagePath = user.getAvatarImage();
+                    
+                    // Kiểm tra nếu là drawable resource name (không chứa "/")
+                    if (!imagePath.contains("/") && !imagePath.contains("\\")) {
+                        // Load từ drawable resource
+                        try {
+                            int resourceId = getResources().getIdentifier(
+                                imagePath, "drawable", getPackageName());
+                            if (resourceId != 0) {
+                                Glide.with(this)
+                                        .load(resourceId)
+                                        .placeholder(R.drawable.avatar)
+                                        .error(R.drawable.avatar)
+                                        .into(currentAvatar);
+                            } else {
+                                // Resource không tồn tại, dùng default
+                                Glide.with(this)
+                                        .load(R.drawable.avatar)
+                                        .into(currentAvatar);
+                            }
+                        } catch (Exception e) {
+                            Glide.with(this)
+                                    .load(R.drawable.avatar)
+                                    .into(currentAvatar);
+                        }
                     } else {
-                        // File không tồn tại, load ảnh mặc định
-                        Glide.with(this)
-                                .load(R.drawable.avatar)
-                                .into(currentAvatar);
+                        // Load từ file path (existing logic)
+                        File imageFile = new File(imagePath);
+                        if (imageFile.exists()) {
+                            Glide.with(this)
+                                    .load(imageFile)
+                                    .placeholder(R.drawable.avatar)
+                                    .error(R.drawable.avatar)
+                                    .into(currentAvatar);
+                        } else {
+                            // File không tồn tại, load ảnh mặc định
+                            Glide.with(this)
+                                    .load(R.drawable.avatar)
+                                    .into(currentAvatar);
+                        }
                     }
                 } else {
                     // Chưa có avatar, load ảnh mặc định
@@ -228,7 +297,10 @@ public class ChangeAvatarActivity extends AppCompatActivity {
 
         String imagePath = null;
         
-        if (selectedImageUri != null) {
+        // Ưu tiên drawable avatar nếu đã chọn
+        if (selectedDrawableAvatar != null) {
+            imagePath = selectedDrawableAvatar;
+        } else if (selectedImageUri != null) {
             // Copy image từ gallery vào internal storage
             imagePath = copyImageToInternalStorage(selectedImageUri);
         } else if (savedImagePath != null) {

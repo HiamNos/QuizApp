@@ -67,26 +67,45 @@
                 android:drawableTint="@color/colorPurple"
                 android:ems="10"
                 android:hint="Địa chỉ Email"
-                android:text="lkhnguyen3006@gmail.com"
+                android:text="cus1@gm.com"
                 android:inputType="textEmailAddress"
                 android:padding="15dp" />
 
-            <EditText
-                android:id="@+id/passwordBox"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/textbox"
-                android:drawableLeft="@drawable/password"
-                android:drawablePadding="15dp"
-                android:drawableTint="@color/colorPurple"
-                android:ems="10"
-                android:hint="Mật khẩu"
-                android:text="12345678"
-                android:inputType="textPassword"
-                android:padding="15dp" />
+                android:background="@drawable/textbox">
+
+                <EditText
+                    android:id="@+id/passwordBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:drawableLeft="@drawable/password"
+                    android:drawablePadding="15dp"
+                    android:drawableTint="@color/colorPurple"
+                    android:ems="10"
+                    android:hint="Mật khẩu"
+                    android:text="123456"
+                    android:inputType="textPassword"
+                    android:padding="15dp"
+                    android:paddingRight="50dp" />
+
+                <ImageView
+                    android:id="@+id/togglePasswordVisibility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ic_visibility_off"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/forgotPasswordBtn"

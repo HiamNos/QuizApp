@@ -42,7 +42,7 @@
 
         <!-- User Avatar -->
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/userAvatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/avatar"
@@ -58,23 +58,25 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/name"
+                android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mian Asad Ali"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/roboto_medium"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="2dp"/>
 
             <TextView
+                android:id="@+id/userEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Người chơi"
-                android:textColor="@color/colorPurple"
-                android:textSize="12sp"
-                android:fontFamily="@font/roboto_light"/>
+                android:text="user@example.com"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:fontFamily="@font/roboto_light"
+                android:layout_marginTop="1dp"/>
         </LinearLayout>
 
         <!-- Score -->

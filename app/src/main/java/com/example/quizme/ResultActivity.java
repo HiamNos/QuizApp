@@ -26,6 +26,12 @@ public class ResultActivity extends AppCompatActivity {
 
         int correctAnswers = getIntent().getIntExtra("correct", 0);
         int totalQuestions = getIntent().getIntExtra("total", 0);
+        int categoryId = getIntent().getIntExtra("categoryId", 1);
+        long completionTime = getIntent().getLongExtra("completionTime", 0);
+
+        System.out.println("ResultActivity: Received data - correct: " + correctAnswers + 
+                          ", total: " + totalQuestions + ", categoryId: " + categoryId + 
+                          ", completionTime: " + completionTime);
 
         long points = correctAnswers * POINTS;
 
@@ -36,11 +42,24 @@ public class ResultActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("QuizApp", MODE_PRIVATE);
         int userId = prefs.getInt("user_id", -1);
         
+        System.out.println("ResultActivity: userId from preferences: " + userId);
+        
         if (userId != -1) {
             User user = databaseHelper.getUserById(userId);
             if (user != null) {
+                System.out.println("ResultActivity: User found: " + user.getName());
                 long newCoins = user.getCoins() + points;
                 databaseHelper.updateUserCoins(userId, newCoins);
+                
+                // Lưu kết quả quiz
+                long resultId = databaseHelper.addQuizResult(userId, categoryId, (int) points, 
+                    totalQuestions, correctAnswers, completionTime);
+                
+                if (resultId != -1) {
+                    System.out.println("ResultActivity: Quiz result saved with ID: " + resultId);
+                } else {
+                    System.out.println("ResultActivity: Failed to save quiz result");
+                }
                 
                 // Cập nhật SharedPreferences
                 SharedPreferences.Editor editor = prefs.edit();
@@ -48,7 +67,11 @@ public class ResultActivity extends AppCompatActivity {
                 editor.apply();
                 
                 Toast.makeText(this, "Bạn đã kiếm được " + points + " xu!", Toast.LENGTH_SHORT).show();
+            } else {
+                System.out.println("ResultActivity: User not found in database");
             }
+        } else {
+            System.out.println("ResultActivity: No userId found in preferences");
         }
 
         binding.restartBtn.setOnClickListener(new View.OnClickListener() {

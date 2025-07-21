@@ -53,6 +53,21 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Friend buttons click listeners
+        binding.btnSearchFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), SearchFriendsActivity.class));
+            }
+        });
+
+        binding.btnFriendRequests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), FriendRequestsActivity.class));
+            }
+        });
+
         // Inflate the layout for this fragment
         return binding.getRoot();
     }

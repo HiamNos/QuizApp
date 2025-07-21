@@ -39,7 +39,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         holder.textView.setText(model.getCategoryName());
         
-        // Xử lý hình ảnh - kiểm tra xem có phải là URL hay tên drawable
+        // Xử lý hình ảnh - kiểm tra xem có phải là URL, file path, hay tên drawable
         String imagePath = model.getCategoryImage();
         System.out.println("Loading image for category: " + model.getCategoryName() + " with path: " + imagePath);
         
@@ -51,6 +51,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                         .placeholder(R.drawable.quiz_icon)
                         .error(R.drawable.quiz_icon)
                         .into(holder.imageView);
+                System.out.println("Loading from URL: " + imagePath);
+            } else if (imagePath.startsWith("/") || imagePath.contains("/storage/") || imagePath.contains("/sdcard/")) {
+                // Nếu là đường dẫn file local, sử dụng Glide để load file
+                Glide.with(context)
+                        .load(new java.io.File(imagePath))
+                        .placeholder(R.drawable.quiz_icon)
+                        .error(R.drawable.quiz_icon)
+                        .into(holder.imageView);
+                System.out.println("Loading from file path: " + imagePath);
             } else {
                 // Nếu là tên drawable, sử dụng Resource ID
                 try {

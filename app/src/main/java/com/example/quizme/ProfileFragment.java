@@ -105,15 +105,37 @@ public class ProfileFragment extends Fragment {
     
     private void loadAvatarImage(String imagePath) {
         if (imagePath != null && !imagePath.isEmpty()) {
-            File imageFile = new File(imagePath);
-            if (imageFile.exists()) {
-                Glide.with(this)
-                        .load(imageFile)
-                        .placeholder(R.drawable.avatar)
-                        .error(R.drawable.avatar)
-                        .into(profileImage);
+            // Kiểm tra nếu là drawable resource name (không chứa "/")
+            if (!imagePath.contains("/") && !imagePath.contains("\\")) {
+                // Load từ drawable resource
+                try {
+                    int resourceId = getContext().getResources().getIdentifier(
+                        imagePath, "drawable", getContext().getPackageName());
+                    if (resourceId != 0) {
+                        Glide.with(this)
+                                .load(resourceId)
+                                .placeholder(R.drawable.avatar)
+                                .error(R.drawable.avatar)
+                                .into(profileImage);
+                    } else {
+                        // Resource không tồn tại, dùng default
+                        profileImage.setImageResource(R.drawable.avatar);
+                    }
+                } catch (Exception e) {
+                    profileImage.setImageResource(R.drawable.avatar);
+                }
             } else {
-                profileImage.setImageResource(R.drawable.avatar);
+                // Load từ file path (existing logic)
+                File imageFile = new File(imagePath);
+                if (imageFile.exists()) {
+                    Glide.with(this)
+                            .load(imageFile)
+                            .placeholder(R.drawable.avatar)
+                            .error(R.drawable.avatar)
+                            .into(profileImage);
+                } else {
+                    profileImage.setImageResource(R.drawable.avatar);
+                }
             }
         } else {
             profileImage.setImageResource(R.drawable.avatar);

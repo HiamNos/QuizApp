@@ -3,7 +3,9 @@ package com.example.quizme;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +23,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Map<String, String> resetCodes = new HashMap<>(); // Lưu mã reset tạm thời
     private String currentEmail = "";
+    private boolean isNewPasswordVisible = false;
+    private boolean isConfirmPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         // Hiển thị màn hình nhập email
         showEmailInput();
+        
+        // Setup password visibility toggles
+        setupPasswordVisibilityToggles();
 
         binding.sendCodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,5 +202,49 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             progressDialog.dismiss();
             Toast.makeText(ForgotPasswordActivity.this, "Không tìm thấy tài khoản!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setupPasswordVisibilityToggles() {
+        // Setup new password visibility toggle
+        ImageView toggleNewPasswordVisibility = findViewById(R.id.toggleNewPasswordVisibility);
+        toggleNewPasswordVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isNewPasswordVisible) {
+                    // Hide password
+                    binding.newPasswordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    toggleNewPasswordVisibility.setImageResource(R.drawable.ic_visibility_off);
+                    isNewPasswordVisible = false;
+                } else {
+                    // Show password
+                    binding.newPasswordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    toggleNewPasswordVisibility.setImageResource(R.drawable.ic_visibility);
+                    isNewPasswordVisible = true;
+                }
+                // Move cursor to end
+                binding.newPasswordInput.setSelection(binding.newPasswordInput.getText().length());
+            }
+        });
+
+        // Setup confirm password visibility toggle
+        ImageView toggleConfirmPasswordVisibility = findViewById(R.id.toggleConfirmPasswordVisibility);
+        toggleConfirmPasswordVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isConfirmPasswordVisible) {
+                    // Hide password
+                    binding.confirmPasswordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    toggleConfirmPasswordVisibility.setImageResource(R.drawable.ic_visibility_off);
+                    isConfirmPasswordVisible = false;
+                } else {
+                    // Show password
+                    binding.confirmPasswordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    toggleConfirmPasswordVisibility.setImageResource(R.drawable.ic_visibility);
+                    isConfirmPasswordVisible = true;
+                }
+                // Move cursor to end
+                binding.confirmPasswordInput.setSelection(binding.confirmPasswordInput.getText().length());
+            }
+        });
     }
 } 

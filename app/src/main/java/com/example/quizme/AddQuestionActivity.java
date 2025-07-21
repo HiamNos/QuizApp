@@ -1,5 +1,6 @@
 package com.example.quizme;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ public class AddQuestionActivity extends AppCompatActivity {
     private ActivityAddQuestionBinding binding;
     private DatabaseHelper databaseHelper;
     private List<CategoryModel> categories;
+    private int preselectedCategoryId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,9 @@ public class AddQuestionActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
         categories = new ArrayList<>();
 
+        // Nhận thông tin danh mục đã chọn từ AdminActivity
+        preselectedCategoryId = getIntent().getIntExtra("selected_category_id", -1);
+
         setupUI();
         loadCategories();
     }
@@ -35,6 +40,10 @@ public class AddQuestionActivity extends AppCompatActivity {
     private void setupUI() {
         binding.addQuestionBtn.setOnClickListener(v -> addQuestion());
         binding.backBtn.setOnClickListener(v -> finish());
+        binding.cancelBtn.setOnClickListener(v -> finish());
+        
+        // Thiết lập Spinner đáp án đúng
+        setupAnswerSpinner();
     }
 
     private void loadCategories() {
@@ -50,6 +59,23 @@ public class AddQuestionActivity extends AppCompatActivity {
             android.R.layout.simple_spinner_item, categoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.categorySpinner.setAdapter(adapter);
+        
+        // Tự động chọn danh mục đã được chọn từ AdminActivity
+        if (preselectedCategoryId != -1) {
+            for (int i = 0; i < categories.size(); i++) {
+                if (categories.get(i).getCategoryId() == preselectedCategoryId) {
+                    binding.categorySpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void setupAnswerSpinner() {
+        String[] answerOptions = {"A - Lựa chọn 1", "B - Lựa chọn 2", "C - Lựa chọn 3", "D - Lựa chọn 4"};
+        ArrayAdapter<String> answerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, answerOptions);
+        answerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.answerSpinner.setAdapter(answerAdapter);
     }
 
     private void addQuestion() {
@@ -71,17 +97,18 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         if (questionText.isEmpty() || option1.isEmpty() || option2.isEmpty() || 
             option3.isEmpty() || option4.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "⚠️ Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (answer.isEmpty()) {
-            Toast.makeText(this, "Vui lòng chọn đáp án đúng!", Toast.LENGTH_SHORT).show();
+        
+        if (binding.answerSpinner.getSelectedItemPosition() == -1) {
+            Toast.makeText(this, "⚠️ Vui lòng chọn đáp án đúng!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         int selectedPosition = binding.categorySpinner.getSelectedItemPosition();
         if (selectedPosition < 0 || selectedPosition >= categories.size()) {
-            Toast.makeText(this, "Vui lòng chọn danh mục!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "⚠️ Vui lòng chọn danh mục!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -90,20 +117,34 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         long result = databaseHelper.addQuestion(question, selectedCategory.getCategoryId());
         if (result != -1) {
-            Toast.makeText(this, "Thêm câu hỏi thành công!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "✅ Thêm câu hỏi thành công!", Toast.LENGTH_SHORT).show();
+            
+            // Trả về kết quả cho AdminActivity để cập nhật danh sách
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("updated_category_id", selectedCategory.getCategoryId());
+            resultIntent.putExtra("updated_category_name", selectedCategory.getCategoryName());
+            setResult(RESULT_OK, resultIntent);
+            
+            clearInputs();
             finish();
         } else {
-            Toast.makeText(this, "Thêm câu hỏi thất bại!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "❌ Thêm câu hỏi thất bại!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void clearInputs() {
+        binding.questionInput.setText("");
+        binding.option1Input.setText("");
+        binding.option2Input.setText("");
+        binding.option3Input.setText("");
+        binding.option4Input.setText("");
+        binding.categorySpinner.setSelection(0);
+        binding.answerSpinner.setSelection(0);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Thiết lập Spinner đáp án đúng
-        String[] answerOptions = {"Đáp án 1", "Đáp án 2", "Đáp án 3", "Đáp án 4"};
-        ArrayAdapter<String> answerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, answerOptions);
-        answerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.answerSpinner.setAdapter(answerAdapter);
+        loadCategories(); // Reload categories when returning to this activity
     }
 } 
